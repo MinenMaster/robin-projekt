@@ -90,8 +90,8 @@
                 return res.ok ? res.json() : null;
             }
 
-            async function convertFromKelvin(value) {
-                const res = await fetch(`${API}/temp?kelvin=${value}`);
+            async function convertFromFahrenheit(value) {
+                const res = await fetch(`${API}/temp?fahrenheit=${value}`);
                 return res.ok ? res.json() : null;
             }
 
@@ -103,7 +103,7 @@
                 const val = target.value;
 
                 if (val === "" || val == null) {
-                    if (target === cInput) kInput.value = "";
+                    if (target === cInput) fInput.value = "";
                     else cInput.value = "";
                     return;
                 }
@@ -111,11 +111,11 @@
                 try {
                     if (target === cInput) {
                         const data = await convertFromCelsius(val);
-                        if (data && data.kelvin != null) {
-                            kInput.value = Number(data.kelvin).toFixed(2);
+                        if (data && data.fahrenheit != null) {
+                            fInput.value = Number(data.fahrenheit).toFixed(2);
                         }
-                    } else if (target === kInput) {
-                        const data = await convertFromKelvin(val);
+                    } else if (target === fInput) {
+                        const data = await convertFromFahrenheit(val);
                         if (data && data.celsius != null) {
                             cInput.value = Number(data.celsius).toFixed(2);
                         }
