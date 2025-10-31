@@ -22,22 +22,22 @@ def greet_post():
 @app.get('/api/temp')
 def temp():
     celsius = request.args.get('celsius')
-    kelvin = request.args.get('kelvin')
-    if celsius and kelvin:
+    fahrenheit = request.args.get('fahrenheit')
+    if celsius and fahrenheit:
         return "Error: You can only provide one temperature"
     elif celsius:
         celsius = float(celsius)
-        kelvin = celsius + 273.15
+        fahrenheit = (celsius * 1.8) + 32
         return {
             "celsius": celsius,
-            "kelvin": kelvin
+            "fahrenheit": fahrenheit
         }
-    elif kelvin:
-        kelvin = float(kelvin)
-        celsius = kelvin - 273.15
+    elif fahrenheit:
+        fahrenheit = float(fahrenheit)
+        celsius = (fahrenheit - 32) / 1.8
         return {
             "celsius": celsius,
-            "kelvin": kelvin
+            "fahrenheit": fahrenheit
         } 
     else:
         return "Error: No temperature provided"
