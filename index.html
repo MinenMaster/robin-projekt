@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Robins Mini-Webseite</title>
+        <style>
+            button {
+                background-color: #4caf50;
+                color: white;
+                border: none;
+                padding: 4px 8px;
+                cursor: pointer;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Robins Webseite</h1>
+
+        <h2>Buttons</h2>
+
+        <button id="hi">Sag Hallo</button>
+        <button id="bye">Sag Tschüss</button>
+
+        <div id="p-list"></div>
+
+        <script>
+            document
+                .getElementById("hi")
+                .addEventListener("click", function () {
+                    const p = document.createElement("p");
+                    p.innerText = "Hello, World!";
+                    document.getElementById("p-list").appendChild(p);
+                });
+
+            document
+                .getElementById("bye")
+                .addEventListener("click", function () {
+                    alert("Tschüss!");
+                });
+        </script>
+
+        <br />
+        <hr />
+
+        <h2>API-Kommunikation</h2>
+
+        <form id="greetForm">
+            <label>Name: <input name="name" /></label>
+            <button type="submit">Senden</button>
+        </form>
+        <p id="output"></p>
+
+        <script>
+            const form = document.getElementById("greetForm");
+            const out = document.getElementById("output");
+
+            const API = "http://127.0.0.1:8000/api";
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const name = new FormData(form).get("name") || "Robin";
+                const res = await fetch(`${API}/greet`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name }),
+                });
+                const data = await res.json();
+                out.textContent = data.message;
+            });
+        </script>
+
+        <form id="tempForm">
+            <label>Celsius: <input name="celsius" type="number" /></label>
+            <label>Kelvin: <input name="kelvin" type="number" /></label>
+        </form>
+        <p id="tempOutput"></p>
+        <script>
+            const tempForm = document.getElementById("tempForm");
+            const tempOut = document.getElementById("tempOutput");
+            const cInput = tempForm.querySelector('input[name="celsius"]');
+            const kInput = tempForm.querySelector('input[name="kelvin"]');
+
+            // prevent feedback loop when updating the other field programmatically
+            let programmaticChange = false;
+
+            async function convertFromCelsius(value) {
+                const res = await fetch(`${API}/temp?celsius=${value}`);
+                return res.ok ? res.json() : null;
+            }
+
+            async function convertFromKelvin(value) {
+                const res = await fetch(`${API}/temp?kelvin=${value}`);
+                return res.ok ? res.json() : null;
+            }
+
+            tempForm.addEventListener("input", async (e) => {
+                if (programmaticChange) return;
+                e.preventDefault();
+
+                const target = e.target;
+                const val = target.value;
+
+                if (val === "" || val == null) {
+                    if (target === cInput) kInput.value = "";
+                    else cInput.value = "";
+                    return;
+                }
+
+                try {
+                    if (target === cInput) {
+                        const data = await convertFromCelsius(val);
+                        if (data && data.kelvin != null) {
+                            kInput.value = Number(data.kelvin).toFixed(2);
+                        }
+                    } else if (target === kInput) {
+                        const data = await convertFromKelvin(val);
+                        if (data && data.celsius != null) {
+                            cInput.value = Number(data.celsius).toFixed(2);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+        </script>
+    </body>
+</html>
