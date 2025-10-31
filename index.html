@@ -56,7 +56,6 @@
             const out = document.getElementById("output");
 
             const API = "http://127.0.0.1:5000/api";
-            //const API = "/api";
 
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
@@ -82,9 +81,6 @@
             const cInput = tempForm.querySelector('input[name="celsius"]');
             const fInput = tempForm.querySelector('input[name="fahrenheit"]');
 
-            // prevent feedback loop when updating the other field programmatically
-            let programmaticChange = false;
-
             async function convertFromCelsius(value) {
                 const res = await fetch(`${API}/temp?celsius=${value}`);
                 return res.ok ? res.json() : null;
@@ -96,7 +92,6 @@
             }
 
             tempForm.addEventListener("input", async (e) => {
-                if (programmaticChange) return;
                 e.preventDefault();
 
                 const target = e.target;
