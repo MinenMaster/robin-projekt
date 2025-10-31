@@ -55,8 +55,8 @@
             const form = document.getElementById("greetForm");
             const out = document.getElementById("output");
 
-            // const API = "http://127.0.0.1:8000/api";
-            const API = "/api";
+            const API = "http://127.0.0.1:5000/api";
+            //const API = "/api";
 
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
@@ -80,7 +80,7 @@
             const tempForm = document.getElementById("tempForm");
             const tempOut = document.getElementById("tempOutput");
             const cInput = tempForm.querySelector('input[name="celsius"]');
-            const kInput = tempForm.querySelector('input[name="kelvin"]');
+            const fInput = tempForm.querySelector('input[name="fahrenheit"]');
 
             // prevent feedback loop when updating the other field programmatically
             let programmaticChange = false;
