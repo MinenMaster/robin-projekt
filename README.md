@@ -170,6 +170,8 @@ server {
 Reload:
 
 ```bash
+sudo systemctl enable --now robin-api
+
 sudo ln -s /etc/nginx/sites-available/robin /etc/nginx/sites-enabled/
 sudo rm /etc/nginx/sites-enabled/default
 
